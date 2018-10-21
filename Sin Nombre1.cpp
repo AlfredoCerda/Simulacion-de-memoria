@@ -220,9 +220,11 @@
  
  void Crear_memoria_fijaConDiferenteTamanio()
  {
- 	int TamMemoria=0, Particiones=0, TamTotal=0, Memoria=0, NumParticiones=0, i=0, NumDeCadaParticion=0;
+ 	int TamMemoria=0, Particiones=0, NumParticiones=0, NumDeCadaParticion=0, TamProceso=0;
  	bool EspacioDisponible = true;
  	int DimMemoria[1000];
+ 	int opc=0;
+ 	char LetProsses[26]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
  	cout<<"Introduzca el tamaño de la memoria: ";
  	cin>>TamMemoria;
  	cout<<"El tamaño de la memoria es de: "<<TamMemoria;
@@ -251,13 +253,80 @@
 		{
 			cout<<" ";
 		}
-		cout<<"|";
+		cout<<"|"<<endl;
+	}
+
+	int ParticionesEficientes[1000];
+	int Insertar[1000];
+	
+	for(int i=0; i<NumParticiones; i++)
+	{
+		Insertar[i]=0;
+		ParticionesEficientes[i]=0;
 	}
 	
-	cout<<"\nIntroduzca el tamaño del proceso que desea insertar a la particion: ";
- 	cin>>TamProceso;
- 	
- 	
+	int aux=0;
+	
+	for(int i=0; i<NumParticiones; i++)
+	{
+			ParticionesEficientes[i]=DimMemoria[i];
+	}
+	
+	for(int i=0; i<NumParticiones; i++)
+	{
+		for(int j=i+1; j<NumParticiones; j++)
+		{
+			if(ParticionesEficientes[i]>ParticionesEficientes[j])
+			{
+				aux= ParticionesEficientes[i];
+				ParticionesEficientes[i]=ParticionesEficientes[j];
+				ParticionesEficientes[j]=aux;
+			}
+			
+		}
+	}
+	
+	do
+	{
+	cout<<"Introduzca el tamaño del proceso: ";
+	cin>>TamProceso;
+	
+	bool validacion=true;
+	int posicion=0, j=0;
+	
+	for(int i=0; i<NumParticiones&&validacion==true;i++)
+	{
+		if(TamProceso<=ParticionesEficientes[i])
+		{	
+			for(j=0; j<NumParticiones;j++)
+			{
+				if(ParticionesEficientes[i]==DimMemoria[j]&&validacion==true)
+				{
+					posicion=j;
+					cout<<"posicion de j: "<<j<<endl;
+					if(Insertar[posicion]==0)
+					{
+						Insertar[posicion] = TamProceso;
+						validacion=false;
+					}
+				}
+			}
+		}
+	}
+	
+	if(validacion==true)
+	{
+		cout<<"Falta espacio en la memoria, elimina algunos procesos"<<endl;
+	}
+	
+	for(int i=0; i<NumParticiones; i++)
+	{
+		cout<<"posicion: "<<i<<"procesos: "<<Insertar[i]<<endl;
+	}
+
+		
+		cin>>opc;
+	}while(opc==1);
 	
  }
  
